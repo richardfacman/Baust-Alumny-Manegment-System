@@ -1,0 +1,17 @@
+
+> baust-alumni-management-backend@1.0.0 start
+> node server.js
+
+MongoDB Atlas connection failed: querySrv ECONNREFUSED _mongodb._tcp.cluster0.fpusn0a.mongodb.net
+Attempting Atlas connection using fallback URI.
+Connected to MongoDB Atlas using fallback host list.
+Connected to MongoDB
+Server is running on port 5000
+[0mGET /api/alumni [32m200[0m 65.584 ms - 2[0m
+[0mGET / [36m304[0m 1.360 ms - -[0m
+[0mGET /api/alumni [32m200[0m 48.253 ms - 2[0m
+[0mGET /site [32m200[0m 7.033 ms - 1295[0m
+[0mGET /site [32m200[0m 2.579 ms - 1295[0m
+[0mGET /site [36m304[0m 1.263 ms - -[0m
+[0mGET /styles.css [33m404[0m 4.469 ms - 149[0m
+[0mGET /favicon.ico [33m404[0m 1.586 ms - 150[0m
