@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <style>
+        .button {
+          background-color: #2980b9;
+          border: none;
+          border-radius:5px;
+          color: white;
+          padding: 10px 25px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 14px;
+          margin: 3px 1px;
+          margin-left: 5px;
+          cursor: pointer;
+        }
+        </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Alumni</title>
+    <link rel="stylesheet" href="stylea.css">
+</head>
+<body>
+    <div class="admin-panel">
+        <header>
+            <h1>Alumni Admin Panel</h1>
+            <nav>
+                <ul>
+                    <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#manage-alumni">Manage Alumni</a></li>
+                    <li><a href="#events">Events</a></li>
+                    <li><a href="#news">News</a></li>
+                    <li><a href="#settings">Settings</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <!-- Dashboard Section -->
+            <section id="dashboard">
+                <h2>Dashboard</h2>
+                <p>Welcome to the admin panel. Use the menu to manage alumni-related content.</p>
+            </section>
+
+            <!-- Manage Alumni Section -->
+            <section id="manage-alumni">
+                <h2>Manage Alumni</h2>
+
+                <!-- Add Alumni Button and Form -->
+                <button id="add-alumni-btn">Add Alumni</button>
+                <div id="add-alumni-form" style="display:none;">
+                    <form id="alumniForm">
+                        <input type="text" name="name" placeholder="Name" required>
+                        <input type="text" name="year" placeholder="Passing Year" required>
+                        <input type="text" name="year" placeholder="Department" required>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Events Section -->
+            <section id="events">
+                <h2>Events</h2>
+                <button>Add Event</button>
+                <button>View Events</button>
+            </section>
+
+            <!-- News Section -->
+            <section id="news">
+                <h2>News</h2>
+                <button>Add News</button>
+                <button>View News</button>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings">
+                <h2>Settings</h2>
+                <p>Configure panel settings here.</p>
+            </section>
+        </main>
+        <footer>
+            <p>Admin Panel &copy; 2024 Alumni Association</p>
+            <!-- <li class="nav-item"> -->
+                <!-- <a class="nav-link" href="logout.php"> Log Out</a> -->
+                <button class="button" onclick="func()">Log Out</button>
+              <!-- </li> -->
+        </footer>
+    </div>
+    <script>
+        function func(){
+          window.location.href = "index.php";
+        }
+      </script>
+</body>
+</html>
+

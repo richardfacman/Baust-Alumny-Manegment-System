@@ -1,0 +1,70 @@
+body {
+    background-image: url(baust2.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.3); /* White with transparency */
+    backdrop-filter: blur(10px); /* Background blur effect */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: white; /* Change text color to stand out */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input, select {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid green;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent input fields */
+}
+
+.radio-button {
+    margin-right: 10px;
+}
+
+button {
+    padding: 10px;
+    background-color:rgb(19, 159, 19);
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color:green;
+}
+
+input[type="submit"] {
+    background-color: rgb(19, 159, 19);
+    color: #fff;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color:green;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration</title>
+  <link rel="stylesheet" href="/site/styles.css">
+</head>
+<body>
+  <div class="wrapper">
+    <form id="registerForm">
+      <h1>Create Account</h1>
+      <div class="input-box">
+        <input type="text" name="firstName" placeholder="First Name" required>
+      </div>
+      <div class="input-box">
+        <input type="text" name="lastName" placeholder="Last Name" required>
+      </div>
+      <div class="input-box">
+        <input type="email" name="email" placeholder="Email" required>
+      </div>
+      <div class="input-box">
+        <input type="password" name="password" placeholder="Password" required>
+      </div>
+      <button type="submit" class="btn">Register</button>
+      <div class="register-link">
+        <p>Already have an account? <a href="/site/index.html">Login now</a></p>
+      </div>
+    </form>
+  </div>
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+      const payload = Object.fromEntries(formData.entries());
+
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert('Registration successful. Please login.');
+        window.location.href = '/site/index.html';
+      } else {
+        alert(data.message || 'Registration failed');
+      }
+    });
+  </script>
+</body>
+</html>

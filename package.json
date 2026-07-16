@@ -1,0 +1,11 @@
+{
+  "name": "alumni-management-system",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install": "npm --prefix backend install",
+    "start": "npm --prefix backend start",
+    "dev": "npm --prefix backend run dev",
+    "static": "node scripts/static-server.js"
+  }
+}
