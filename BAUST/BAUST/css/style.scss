@@ -87,7 +87,7 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-image: url(../images/hero-bg.jpg);
+  background-image: url(../images/baust-academic-building.png);
   background-size: cover;
   background-attachment: fixed;
 }
@@ -379,7 +379,7 @@ a:focus {
 // trainer section
 
 .trainer_section {
-  background-image: url(../images/trainer-bg.jpg);
+  background-image: url(../images/baust-academic-building.png);
   background-size: cover;
   background-attachment: fixed;
   color: $white;
@@ -416,7 +416,164 @@ a:focus {
       background-color: $white;
       border-radius: 50px;
       margin-top: -25px;
+
+      img {
+        width: 24px;
+        height: 24px;
+        display: block;
+      }
     }
+  }
+}
+
+.events_page {
+  .hero_area {
+    background-image: linear-gradient(120deg, rgba(9, 16, 31, 0.92), rgba(255, 41, 83, 0.72)), url("../images/baust-academic-building.png");
+    box-shadow: 0 18px 45px rgba(9, 16, 31, 0.22);
+  }
+}
+
+.events_section {
+  background-image: linear-gradient(135deg, rgba(10, 15, 29, 0.94), rgba(37, 34, 51, 0.9)), url(../images/baust-academic-building.png);
+  position: relative;
+  overflow: hidden;
+
+  .heading_container {
+    h2 {
+      letter-spacing: 0;
+    }
+  }
+
+  .box {
+    position: relative;
+    min-height: 100%;
+    padding: 16px 16px 28px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.26);
+    backdrop-filter: blur(8px);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.36);
+
+      .img-box {
+        img {
+          transform: scale(1.05);
+        }
+      }
+    }
+
+    .event_date {
+      position: absolute;
+      z-index: 2;
+      top: 28px;
+      left: 28px;
+      width: 82px;
+      padding: 8px 6px;
+      background: $primary1;
+      color: $white;
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(255, 41, 83, 0.35);
+
+      span {
+        display: block;
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      small {
+        display: block;
+        margin-top: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+    }
+
+    .name {
+      h5 {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 18px;
+        font-size: 19px;
+        line-height: 1.35;
+      }
+    }
+
+    .img-box {
+      width: 100%;
+      aspect-ratio: 16 / 11;
+      border-radius: 14px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+
+      img {
+        height: 100%;
+        object-fit: cover;
+        filter: saturate(1.08) contrast(1.04);
+        transition: transform 0.35s ease;
+      }
+    }
+
+    .social_box {
+      margin-top: 12px;
+      width: 190px;
+      padding: 10px 34px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+
+      a {
+        transition: transform 0.2s ease;
+
+        &:hover,
+        &:focus {
+          transform: translateY(-3px);
+        }
+      }
+    }
+  }
+}
+
+.events_intro {
+  max-width: 720px;
+  margin: 18px auto 0;
+  color: rgba(255, 255, 255, 0.78);
+  text-align: center;
+  line-height: 1.8;
+}
+
+.event_details {
+  padding: 20px 4px 8px;
+
+  p {
+    min-height: 78px;
+    margin-bottom: 18px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    line-height: 1.75;
+  }
+}
+
+.event_btn {
+  display: inline-block;
+  padding: 10px 22px;
+  background-color: $primary1;
+  color: $white;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 0 14px 32px rgba(255, 41, 83, 0.3);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+
+  &:hover,
+  &:focus {
+    background-color: $white;
+    color: $primary1;
+    transform: translateY(-2px);
   }
 }
 
@@ -562,19 +719,19 @@ a:focus {
 /* footer section*/
 
 .footer_section {
-  background-color: #fbfdfd;
-  padding: 20px;
+  background-color: #0f1724;
+  padding: 24px;
   font-weight: 500;
 }
 
 .footer_section p {
-  color: #292929;
+  color: rgba(255, 255, 255, 0.82);
   margin: 0;
   text-align: center;
 }
 
 .footer_section a {
-  color: #292929;
+  color: $white;
 }
 
 /* end footer section*/

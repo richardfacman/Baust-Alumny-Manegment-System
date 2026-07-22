@@ -250,13 +250,13 @@
             </div>
             <div class="social_box">
               <a href="">
-                <img src="images/facebook-logo.png" alt="">
+                <img src="images/linkedin-logo.svg" alt="LinkedIn">
               </a>
               <a href="">
-                <img src="images/twitter.png" alt="">
+                <img src="images/email-logo.svg" alt="Email">
               </a>
               <a href="">
-                <img src="images/instagram-logo.png" alt="">
+                <img src="images/website-logo.svg" alt="Website">
               </a>
             </div>
           </div>
@@ -273,13 +273,13 @@
             </div>
             <div class="social_box">
               <a href="">
-                <img src="images/facebook-logo.png" alt="">
+                <img src="images/linkedin-logo.svg" alt="LinkedIn">
               </a>
               <a href="">
-                <img src="images/twitter.png" alt="">
+                <img src="images/email-logo.svg" alt="Email">
               </a>
               <a href="">
-                <img src="images/instagram-logo.png" alt="">
+                <img src="images/website-logo.svg" alt="Website">
               </a>
             </div>
           </div>
@@ -296,13 +296,13 @@
             </div>
             <div class="social_box">
               <a href="">
-                <img src="images/facebook-logo.png" alt="">
+                <img src="images/linkedin-logo.svg" alt="LinkedIn">
               </a>
               <a href="">
-                <img src="images/twitter.png" alt="">
+                <img src="images/email-logo.svg" alt="Email">
               </a>
               <a href="">
-                <img src="images/instagram-logo.png" alt="">
+                <img src="images/website-logo.svg" alt="Website">
               </a>
             </div>
           </div>
@@ -320,7 +320,7 @@
       <div class="row">
         <div class="col-md-6 px-0">
           <div class="img-box">
-            <img src="images/contact-img.jpg" alt="">
+            <img src="images/baust-academic-building.png" alt="BAUST academic building">
           </div>
         </div>
         <div class="col-lg-5 col-md-6">

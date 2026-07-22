@@ -21,6 +21,15 @@
 }
 
 @media (max-width: 768px) {
+    .events_section .box {
+        margin-top: 35px;
+    }
+
+    .events_section .box .name h5,
+    .event_details p {
+        min-height: auto;
+    }
+
     .contact_section .form_container {
         padding: 45px 0;
     }
