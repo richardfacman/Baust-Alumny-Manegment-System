@@ -34,18 +34,21 @@
       const formData = new FormData(this);
       const payload = Object.fromEntries(formData.entries());
 
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await response.json();
-      if (data.success) {
+      try {
+        const response = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          alert(data.message || 'Registration failed');
+          return;
+        }
         alert('Registration successful. Please login.');
         window.location.href = '/site/index.html';
-      } else {
-        alert(data.message || 'Registration failed');
+      } catch (error) {
+        alert('Unable to reach the registration service. Please try again.');
       }
     });
   </script>

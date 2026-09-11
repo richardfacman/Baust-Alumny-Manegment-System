@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/BAUST/BAUST/index3.html"
+      "destination": "/BAUST/BAUST/index.html"
     },
     {
       "source": "/site",

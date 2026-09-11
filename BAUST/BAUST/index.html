@@ -38,17 +38,20 @@
         password: document.getElementById('password').value
       };
 
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await response.json();
-      if (data.success) {
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          alert(data.message || 'Invalid email or password');
+          return;
+        }
         window.location.href = '/site/index2.html';
-      } else {
-        alert(data.message || 'Invalid email or password');
+      } catch (error) {
+        alert('Unable to reach the login service. Please try again.');
       }
     });
   </script>

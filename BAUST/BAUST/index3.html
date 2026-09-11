@@ -20,6 +20,9 @@
         <i class='bx bxs-lock-alt' ></i>
       </div>
       <button type="submit" class="btn">Login</button>
+      <div class="register-link">
+        <p><a href="/site/index.html">User Login</a> | <a href="/site/registration%20form.html">Register</a></p>
+      </div>
     </form>
   </div>
   <script>
@@ -30,18 +33,21 @@
         password: document.getElementById('password').value
       };
 
-      const response = await fetch('/api/auth/admin-login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await response.json();
-      if (data.success) {
+      try {
+        const response = await fetch('/api/auth/admin-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          alert(data.message || 'Invalid username or password');
+          return;
+        }
         localStorage.setItem('baustAdminToken', data.token);
         window.location.href = '/site/admin%20panel.html';
-      } else {
-        alert(data.message || 'Invalid username or password');
+      } catch (error) {
+        alert('Unable to reach the admin login service. Please try again.');
       }
     });
   </script>
