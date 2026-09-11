@@ -1,98 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <style>
-        .button {
-          background-color: #2980b9;
-          border: none;
-          border-radius:5px;
-          color: white;
-          padding: 10px 25px;
-          text-align: center;
-          text-decoration: none;
-          display: inline-block;
-          font-size: 14px;
-          margin: 3px 1px;
-          margin-left: 5px;
-          cursor: pointer;
-        }
-        </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Alumni</title>
-    <link rel="stylesheet" href="stylea.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAUST Alumni Admin Dashboard</title>
+  <link rel="stylesheet" href="/site/admin-dashboard.css">
 </head>
 <body>
-    <div class="admin-panel">
-        <header>
-            <h1>Alumni Admin Panel</h1>
-            <nav>
-                <ul>
-                    <li><a href="#dashboard">Dashboard</a></li>
-                    <li><a href="#manage-alumni">Manage Alumni</a></li>
-                    <li><a href="#events">Events</a></li>
-                    <li><a href="#news">News</a></li>
-                    <li><a href="#settings">Settings</a></li>
-                </ul>
-            </nav>
-        </header>
-        <main>
-            <!-- Dashboard Section -->
-            <section id="dashboard">
-                <h2>Dashboard</h2>
-                <p>Welcome to the admin panel. Use the menu to manage alumni-related content.</p>
-            </section>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <span class="brand-mark">BA</span>
+        <div>
+          <strong>BAUST Alumni</strong>
+          <small>Admin Console</small>
+        </div>
+      </div>
+      <nav class="nav-list" aria-label="Admin sections">
+        <button class="nav-item active" data-view="dashboard"><span>Dashboard</span></button>
+        <button class="nav-item" data-view="alumni"><span>Alumni</span></button>
+        <button class="nav-item" data-view="events"><span>Events</span></button>
+        <button class="nav-item" data-view="news"><span>News</span></button>
+        <button class="nav-item" data-view="reports"><span>Reports</span></button>
+        <button class="nav-item" data-view="notifications"><span>Notifications</span></button>
+        <button class="nav-item" data-view="settings"><span>Settings</span></button>
+      </nav>
+      <button class="ghost-button sidebar-logout" id="logoutBtn">Logout</button>
+    </aside>
 
-            <!-- Manage Alumni Section -->
-            <section id="manage-alumni">
-                <h2>Manage Alumni</h2>
+    <div class="main-shell">
+      <header class="topbar">
+        <button class="icon-button mobile-only" id="menuBtn" aria-label="Open navigation">☰</button>
+        <div>
+          <p class="eyebrow">University Alumni Association</p>
+          <h1 id="pageTitle">Dashboard</h1>
+        </div>
+        <div class="topbar-actions">
+          <div class="search-wrap">
+            <input id="globalSearch" type="search" placeholder="Search alumni, events, news" aria-label="Global search">
+            <div class="search-results" id="searchResults" hidden></div>
+          </div>
+          <button class="icon-button" id="notificationBtn" aria-label="Notifications">
+            <span>🔔</span><b id="notificationBadge">0</b>
+          </button>
+          <div class="admin-chip">
+            <span>A</span>
+            <div><strong>Admin</strong><small>Authenticated</small></div>
+          </div>
+        </div>
+      </header>
 
-                <!-- Add Alumni Button and Form -->
-                <button id="add-alumni-btn">Add Alumni</button>
-                <div id="add-alumni-form" style="display:none;">
-                    <form id="alumniForm">
-                        <input type="text" name="name" placeholder="Name" required>
-                        <input type="text" name="year" placeholder="Passing Year" required>
-                        <input type="text" name="year" placeholder="Department" required>
-                        <button type="submit">Submit</button>
-                    </form>
-                </div>
-            </section>
-
-            <!-- Events Section -->
-            <section id="events">
-                <h2>Events</h2>
-                <button>Add Event</button>
-                <button>View Events</button>
-            </section>
-
-            <!-- News Section -->
-            <section id="news">
-                <h2>News</h2>
-                <button>Add News</button>
-                <button>View News</button>
-            </section>
-
-            <!-- Settings Section -->
-            <section id="settings">
-                <h2>Settings</h2>
-                <p>Configure panel settings here.</p>
-            </section>
-        </main>
-        <footer>
-            <p>Admin Panel &copy; 2024 Alumni Association</p>
-            <!-- <li class="nav-item"> -->
-                <!-- <a class="nav-link" href="logout.php"> Log Out</a> -->
-                <button class="button" onclick="func()">Log Out</button>
-              <!-- </li> -->
-        </footer>
+      <main class="content">
+        <section class="view active" id="dashboardView"></section>
+        <section class="view" id="alumniView"></section>
+        <section class="view" id="eventsView"></section>
+        <section class="view" id="newsView"></section>
+        <section class="view" id="reportsView"></section>
+        <section class="view" id="notificationsView"></section>
+        <section class="view" id="settingsView"></section>
+      </main>
     </div>
-    <script>
-        function func(){
-          window.location.href = "index.php";
-        }
-      </script>
+  </div>
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <h2 id="modalTitle"></h2>
+        <button class="icon-button" id="modalClose" aria-label="Close">×</button>
+      </div>
+      <div id="modalBody"></div>
+    </section>
+  </div>
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+  <script src="/site/admin-dashboard.js"></script>
 </body>
 </html>
-

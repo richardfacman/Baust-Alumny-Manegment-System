@@ -1,2 +1,4 @@
 Static site running at http://127.0.0.1:8000/
+Site alias running at http://127.0.0.1:8000/site/
+Proxying /api/* to http://127.0.0.1:5000/
 Serving C:\alumni-management-system\BAUST\BAUST

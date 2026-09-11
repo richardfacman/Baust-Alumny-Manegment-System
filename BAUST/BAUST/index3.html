@@ -38,6 +38,7 @@
 
       const data = await response.json();
       if (data.success) {
+        localStorage.setItem('baustAdminToken', data.token);
         window.location.href = '/site/admin%20panel.html';
       } else {
         alert(data.message || 'Invalid username or password');

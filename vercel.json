@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/backend/server.js"
+    },
+    {
+      "source": "/site",
+      "destination": "/BAUST/BAUST/index.html"
+    },
+    {
+      "source": "/site/:path*",
+      "destination": "/BAUST/BAUST/:path*"
+    }
+  ]
+}

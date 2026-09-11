@@ -249,13 +249,16 @@
               <img src="images/t1.jpg" alt="">
             </div>
             <div class="social_box">
-              <a href="">
-                <img src="images/linkedin-logo.svg" alt="LinkedIn">
+              <a class="social_badge" href="https://twitter.com" title="Twitter">
+                <img src="images/twitter.png" alt="Twitter">
               </a>
-              <a href="">
+              <a class="social_badge" href="https://www.facebook.com" title="Facebook">
+                <img src="images/facebook-logo.png" alt="Facebook">
+              </a>
+              <a class="social_badge" href="mailto:alumni@baust.edu.bd" title="Email">
                 <img src="images/email-logo.svg" alt="Email">
               </a>
-              <a href="">
+              <a class="social_badge" href="index2.html" title="Website">
                 <img src="images/website-logo.svg" alt="Website">
               </a>
             </div>
@@ -272,13 +275,16 @@
               <img src="images/t2.jpg" alt="">
             </div>
             <div class="social_box">
-              <a href="">
-                <img src="images/linkedin-logo.svg" alt="LinkedIn">
+              <a class="social_badge" href="https://twitter.com" title="Twitter">
+                <img src="images/twitter.png" alt="Twitter">
               </a>
-              <a href="">
+              <a class="social_badge" href="https://www.facebook.com" title="Facebook">
+                <img src="images/facebook-logo.png" alt="Facebook">
+              </a>
+              <a class="social_badge" href="mailto:alumni@baust.edu.bd" title="Email">
                 <img src="images/email-logo.svg" alt="Email">
               </a>
-              <a href="">
+              <a class="social_badge" href="index2.html" title="Website">
                 <img src="images/website-logo.svg" alt="Website">
               </a>
             </div>
@@ -295,13 +301,16 @@
               <img src="images/t3.jpg" alt="">
             </div>
             <div class="social_box">
-              <a href="">
-                <img src="images/linkedin-logo.svg" alt="LinkedIn">
+              <a class="social_badge" href="https://twitter.com" title="Twitter">
+                <img src="images/twitter.png" alt="Twitter">
               </a>
-              <a href="">
+              <a class="social_badge" href="https://www.facebook.com" title="Facebook">
+                <img src="images/facebook-logo.png" alt="Facebook">
+              </a>
+              <a class="social_badge" href="mailto:alumni@baust.edu.bd" title="Email">
                 <img src="images/email-logo.svg" alt="Email">
               </a>
-              <a href="">
+              <a class="social_badge" href="index2.html" title="Website">
                 <img src="images/website-logo.svg" alt="Website">
               </a>
             </div>

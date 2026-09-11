@@ -6,7 +6,7 @@ Usage:
 
 What it does:
  - Stops backend-related node processes (safely)
- - Installs backend npm dependencies
+ - Installs backend npm dependencies only when missing or stale
  - Starts the backend using `npm --prefix backend start` (detached)
  - Optionally starts a PHP built-in server for the `alumni/` folder on port 8000
  - Writes backend logs to `backend.log` in repo root
@@ -19,17 +19,19 @@ param(
 )
 
 $repoRoot = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$backendBasePort = 5000
+$frontendPort = 8000
 Write-Host "Repository root: $repoRoot"
 
 function Stop-BackendProcesses {
-    Write-Host 'Stopping backend-related node processes...'
+    Write-Host 'Stopping old project node processes...'
     try {
-        $procs = Get-CimInstance Win32_Process -Filter "Name='node.exe'" -ErrorAction Stop | Where-Object { $_.CommandLine -match 'server\.js|--prefix backend|backend\\node_modules' }
+        $procs = Get-CimInstance Win32_Process -Filter "Name='node.exe'" -ErrorAction Stop | Where-Object { $_.CommandLine -match 'server\.js|--prefix backend|backend\\node_modules|static-server\.js' }
     } catch {
         Write-Warning "Could not inspect node command lines: $($_.Exception.Message)"
-        Write-Warning 'Falling back to stopping node processes listening on backend ports.'
+        Write-Warning 'Falling back to stopping node processes listening on project ports.'
 
-        $ports = $basePort..($basePort + 9)
+        $ports = @($backendBasePort..($backendBasePort + 9)) + @($frontendPort)
         $pids = netstat -ano | Select-String 'LISTENING' | ForEach-Object {
             if ($_.Line -match '^\s*TCP\s+\S+:(\d+)\s+\S+\s+LISTENING\s+(\d+)\s*$') {
                 $port = [int]$matches[1]
@@ -46,16 +48,38 @@ function Stop-BackendProcesses {
         }
         return
     }
-    if (-not $procs) { Write-Host 'No backend-related node processes found.'; return }
+    if (-not $procs) { Write-Host 'No old project node processes found.'; return }
     $procs | Select-Object ProcessId,CommandLine | ForEach-Object { Write-Host "Killing PID: $($_.ProcessId) - $($_.CommandLine)"; Stop-Process -Id $_.ProcessId -Force }
 }
 
 function Install-BackendDeps {
+    $packageLock = Join-Path $repoRoot 'backend\package-lock.json'
+    $packageJson = Join-Path $repoRoot 'backend\package.json'
+    $nodeModules = Join-Path $repoRoot 'backend\node_modules'
+    $installStamp = Join-Path $nodeModules '.install-stamp'
+
+    $needsInstall = -not (Test-Path $nodeModules) -or -not (Test-Path $installStamp)
+    if (-not $needsInstall -and (Test-Path $packageLock)) {
+        $needsInstall = (Get-Item $packageLock).LastWriteTimeUtc -gt (Get-Item $installStamp).LastWriteTimeUtc
+    }
+    if (-not $needsInstall -and (Test-Path $packageJson)) {
+        $needsInstall = (Get-Item $packageJson).LastWriteTimeUtc -gt (Get-Item $installStamp).LastWriteTimeUtc
+    }
+
+    if (-not $needsInstall) {
+        Write-Host 'Backend dependencies are already installed and current.'
+        return
+    }
+
     Write-Host 'Installing backend dependencies (npm.cmd --prefix backend install)...'
     Push-Location $repoRoot
     try {
         $exit = & npm.cmd --prefix backend install
         if ($LASTEXITCODE -ne 0) { Write-Error "npm install exited with code $LASTEXITCODE" }
+        if (-not (Test-Path $nodeModules)) {
+            New-Item -ItemType Directory -Path $nodeModules | Out-Null
+        }
+        Set-Content -Path $installStamp -Value (Get-Date).ToUniversalTime().ToString('o')
     } finally { Pop-Location }
 }
 
@@ -77,21 +101,21 @@ function Start-Backend {
 }
 
 function Start-PhpFrontend {
-    Write-Host 'Starting PHP built-in server for alumni/ on port 8000 (if php is available)...'
+    Write-Host "Starting PHP built-in server for alumni/ on port $frontendPort (if php is available)..."
     $php = Get-Command php -ErrorAction SilentlyContinue
     if (-not $php) { Write-Warning 'PHP not found on PATH. Skipping PHP server.'; return $false }
     $alumniDir = Join-Path $repoRoot 'alumni'
     if (-not (Test-Path $alumniDir)) { Write-Warning "Folder $alumniDir not found. Skipping PHP server."; return $false }
 
     $log = Join-Path $repoRoot 'php-server.log'
-    $cmd = "php -S 127.0.0.1:8000 -t `"$alumniDir`" > `"$log`" 2>&1"
+    $cmd = "php -S 127.0.0.1:$frontendPort -t `"$alumniDir`" > `"$log`" 2>&1"
     $proc = Start-Process -FilePath 'cmd.exe' -ArgumentList "/c $cmd" -WorkingDirectory $repoRoot -WindowStyle Hidden -PassThru
     Write-Host "PHP server started (PID $($proc.Id)). Logs: $log"
     return $true
 }
 
 function Start-StaticFrontend {
-    Write-Host 'Starting static BAUST frontend fallback on port 8000...'
+    Write-Host "Starting static BAUST frontend fallback on port $frontendPort..."
     $node = Get-Command node -ErrorAction SilentlyContinue
     if (-not $node) { Write-Warning 'Node not found on PATH. Skipping static frontend.'; return }
 
@@ -122,4 +146,4 @@ if ($StartPhp) {
 
 Write-Host 'Run script finished. Use the logs to inspect output.'
 Write-Host 'Backend URL: http://127.0.0.1:5000/ (or the port shown in backend.log if auto-restarted on another port)'
-if ($StartPhp) { Write-Host 'Frontend URL: http://127.0.0.1:8000/' }
+if ($StartPhp) { Write-Host "Frontend URL: http://127.0.0.1:$frontendPort/" }

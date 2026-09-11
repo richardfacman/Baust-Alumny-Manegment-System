@@ -1,0 +1,15 @@
+{
+  "associationName": "BAUST Alumni Association",
+  "contactEmail": "alumni@baust.edu.bd",
+  "phone": "+880 1234 567890",
+  "address": "BAUST Campus, Saidpur",
+  "website": "https://baust.edu.bd",
+  "adminName": "Admin",
+  "adminEmail": "admin@baust.edu.bd",
+  "notifications": {
+    "newAlumni": true,
+    "events": true,
+    "system": true
+  },
+  "version": "1.0.0"
+}

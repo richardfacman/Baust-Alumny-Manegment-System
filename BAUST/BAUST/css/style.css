@@ -575,8 +575,11 @@ a:focus {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  width: 225px;
-  padding: 12px 45px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 245px;
+  padding: 12px 38px;
   background-color: #ffffff;
   border-radius: 50px;
   margin-top: -25px;
@@ -584,20 +587,29 @@ a:focus {
 
 .events_section .box .social_box {
   margin-top: 12px;
-  width: 190px;
-  padding: 10px 34px;
+  width: 210px;
+  padding: 10px 30px;
   box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
 }
 
-.events_section .box .social_box a {
+.trainer_section .box .social_box a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   -webkit-transition: -webkit-transform 0.2s ease;
   transition: -webkit-transform 0.2s ease;
   transition: transform 0.2s ease;
   transition: transform 0.2s ease, -webkit-transform 0.2s ease;
 }
 
-.events_section .box .social_box a:hover,
-.events_section .box .social_box a:focus {
+.trainer_section .box .social_box a:hover,
+.trainer_section .box .social_box a:focus {
   -webkit-transform: translateY(-3px);
           transform: translateY(-3px);
 }

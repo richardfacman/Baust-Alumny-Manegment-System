@@ -8,8 +8,8 @@ const cors = require('cors');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const dns = require('dns').promises;
-const { MongoMemoryServer } = require('mongodb-memory-server');
 const alumniRoutes = require('./routes/alumni');
+const adminRoutes = require('./routes/admin');
 
 dotenv.config();
 
@@ -18,7 +18,6 @@ const basePort = Number(process.env.PORT) || 5000;
 const mongoUri = process.env.MONGODB_URI;
 const staticSiteDir = path.join(__dirname, '..', 'BAUST', 'BAUST');
 const usersFilePath = path.join(staticSiteDir, 'data', 'users.json');
-let mongoServer;
 const server = http.createServer(app);
 
 function ensureUsersStore() {
@@ -34,6 +33,8 @@ function ensureUsersStore() {
 function hashPassword(password) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
+
+const adminToken = process.env.ADMIN_TOKEN || hashPassword('admin:1234:baust-admin');
 
 function readUsers() {
   ensureUsersStore();
@@ -109,10 +110,19 @@ function authenticateAdmin(payload) {
   const password = String(payload.password || '').trim();
 
   if (username === 'admin' && password === '1234') {
-    return { success: true, status: 200, message: 'Admin login successful.' };
+    return { success: true, status: 200, message: 'Admin login successful.', token: adminToken };
   }
 
   return { success: false, status: 401, message: 'Invalid admin credentials.' };
+}
+
+function requireAdmin(req, res, next) {
+  const auth = String(req.headers.authorization || '');
+  const token = auth.startsWith('Bearer ') ? auth.slice(7) : String(req.headers['x-admin-token'] || '');
+  if (token !== adminToken) {
+    return res.status(401).json({ message: 'Admin authentication required.' });
+  }
+  return next();
 }
 
 async function listenOnAvailablePort(startPort, maxAttempts = 10) {
@@ -215,11 +225,12 @@ app.post('/api/auth/admin-login', (req, res) => {
   if (!result.success) {
     return res.status(result.status).json({ success: false, message: result.message });
   }
-  return res.json({ success: true, message: result.message });
+  return res.json({ success: true, message: result.message, token: result.token });
 });
 
 app.use('/site', express.static(staticSiteDir));
 app.use('/api/alumni', alumniRoutes);
+app.use('/api/admin', requireAdmin, adminRoutes);
 
 function parseMongoUri(uri) {
   const cleaned = uri.replace(/^mongodb\+srv:\/\//, '').replace(/^mongodb:\/\//, '');
@@ -286,27 +297,35 @@ async function connectDatabase() {
           console.warn('Atlas fallback connection failed:', fallbackError.message);
         }
       }
-      console.warn('Falling back to an in-memory MongoDB instance for local development/test.');
+      console.warn('Continuing without MongoDB. Alumni API will use local JSON storage.');
     }
   } else {
-    console.warn('No MONGODB_URI found. Using in-memory MongoDB instance for development/test.');
+    console.warn('No MONGODB_URI found. Alumni API will use local JSON storage.');
   }
 
-  mongoServer = await MongoMemoryServer.create();
-  const uri = mongoServer.getUri();
-  return mongoose.connect(uri, options);
+  return null;
 }
 
-connectDatabase()
-  .then(async () => {
-    console.log('Connected to MongoDB');
-    const activePort = await listenOnAvailablePort(basePort);
-    console.log(`Server is running on port ${activePort}`);
-    if (!mongoUri) {
-      console.log('Using in-memory MongoDB database for development/test. Data is temporary.');
-    }
-  })
-  .catch((error) => {
+if (process.env.VERCEL) {
+  connectDatabase().catch((error) => {
     console.error('MongoDB connection error:', error.message);
-    process.exit(1);
   });
+} else {
+  connectDatabase()
+    .then(async () => {
+      if (mongoose.connection.readyState === 1) {
+        console.log('Connected to MongoDB');
+      }
+      const activePort = await listenOnAvailablePort(basePort);
+      console.log(`Server is running on port ${activePort}`);
+      if (mongoose.connection.readyState !== 1) {
+        console.log('Using local JSON storage for alumni data.');
+      }
+    })
+    .catch((error) => {
+      console.error('MongoDB connection error:', error.message);
+      process.exit(1);
+    });
+}
+
+module.exports = app;
