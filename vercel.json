@@ -2,8 +2,8 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "/backend/server.js"
+      "source": "/",
+      "destination": "/site/index3.html"
     },
     {
       "source": "/site",
