@@ -15,6 +15,18 @@ This guide provides step-by-step instructions for deploying the BAUST Alumni Man
 - [ ] Environment variables configured
 - [ ] SSL certificate ready (for HTTPS production)
 
+## Vercel Authentication Requirement
+
+Vercel functions are stateless and their local filesystem is temporary. Configure a persistent MongoDB connection before deploying if users must register and log in across requests.
+
+In Vercel Project Settings, add:
+
+```text
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>/<database>?retryWrites=true&w=majority
+```
+
+The application uses the MongoDB `User` collection when `MONGODB_URI` is available. Without it, JSON storage is only a local-development fallback and newly registered Vercel users will not persist reliably between function invocations.
+
 ## Deployment Methods
 
 ### Method 1: Local Development (Fastest)

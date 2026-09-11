@@ -10,6 +10,7 @@ const dotenv = require('dotenv');
 const dns = require('dns').promises;
 const alumniRoutes = require('./routes/alumni');
 const adminRoutes = require('./routes/admin');
+const User = require('./models/User');
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ const staticSiteDir = path.join(__dirname, '..', 'BAUST', 'BAUST');
 const dataDir = process.env.VERCEL ? path.join('/tmp', 'baust-data') : path.join(staticSiteDir, 'data');
 const usersFilePath = path.join(dataDir, 'users.json');
 const server = http.createServer(app);
+let databaseReady;
 
 function ensureUsersStore() {
   const usersDir = path.dirname(usersFilePath);
@@ -51,7 +53,7 @@ function writeUsers(users) {
   fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf8');
 }
 
-function registerUser(payload) {
+async function registerUser(payload) {
   const firstName = String(payload.firstName || payload.fname || payload.firstname || '').trim();
   const lastName = String(payload.lastName || payload.lname || payload.lastname || '').trim();
   const email = String(payload.email || '').trim().toLowerCase();
@@ -59,6 +61,15 @@ function registerUser(payload) {
 
   if (!firstName || !lastName || !email || !password) {
     return { success: false, status: 400, message: 'Please fill in all required fields.' };
+  }
+
+  if (databaseReady) await databaseReady;
+  if (mongoose.connection.readyState === 1) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return { success: false, status: 409, message: 'Email already exists.' };
+
+    await User.create({ firstName, lastName, email, password: hashPassword(password) });
+    return { success: true, status: 200 };
   }
 
   const users = readUsers();
@@ -80,7 +91,7 @@ function registerUser(payload) {
   return { success: true, status: 200, user };
 }
 
-function authenticateUser(payload) {
+async function authenticateUser(payload) {
   const email = String(payload.email || '').trim().toLowerCase();
   const password = String(payload.password || '').trim();
 
@@ -88,8 +99,14 @@ function authenticateUser(payload) {
     return { success: false, status: 400, message: 'Please provide your email and password.' };
   }
 
-  const users = readUsers();
-  const user = users.find((entry) => entry.email === email && entry.password === hashPassword(password));
+  if (databaseReady) await databaseReady;
+  let user;
+  if (mongoose.connection.readyState === 1) {
+    user = await User.findOne({ email, password: hashPassword(password) }).lean();
+  } else {
+    const users = readUsers();
+    user = users.find((entry) => entry.email === email && entry.password === hashPassword(password));
+  }
   if (!user) {
     return { success: false, status: 401, message: 'Invalid email or password.' };
   }
@@ -188,33 +205,33 @@ app.get('/site/register.php', (req, res) => {
   res.redirect('/site/registration%20form.html');
 });
 
-app.post('/site/register.php', (req, res) => {
+app.post('/site/register.php', async (req, res) => {
   const isSignup = Object.prototype.hasOwnProperty.call(req.body, 'signUp');
   if (isSignup) {
-    const result = registerUser(req.body);
+    const result = await registerUser(req.body);
     if (!result.success) {
       return res.status(result.status).send(result.message);
     }
     return res.redirect('/site/index.html');
   }
 
-  const loginResult = authenticateUser(req.body);
+  const loginResult = await authenticateUser(req.body);
   if (!loginResult.success) {
     return res.status(loginResult.status).send(loginResult.message);
   }
   return res.redirect('/site/index.html');
 });
 
-app.post('/api/auth/register', (req, res) => {
-  const result = registerUser(req.body);
+app.post('/api/auth/register', async (req, res) => {
+  const result = await registerUser(req.body);
   if (!result.success) {
     return res.status(result.status).json({ success: false, message: result.message });
   }
   return res.json({ success: true, message: 'Registration successful.' });
 });
 
-app.post('/api/auth/login', (req, res) => {
-  const result = authenticateUser(req.body);
+app.post('/api/auth/login', async (req, res) => {
+  const result = await authenticateUser(req.body);
   if (!result.success) {
     return res.status(result.status).json({ success: false, message: result.message });
   }
@@ -307,12 +324,14 @@ async function connectDatabase() {
   return null;
 }
 
+databaseReady = connectDatabase();
+
 if (process.env.VERCEL) {
-  connectDatabase().catch((error) => {
+  databaseReady.catch((error) => {
     console.error('MongoDB connection error:', error.message);
   });
 } else {
-  connectDatabase()
+  databaseReady
     .then(async () => {
       if (mongoose.connection.readyState === 1) {
         console.log('Connected to MongoDB');
