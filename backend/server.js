@@ -17,7 +17,8 @@ const app = express();
 const basePort = Number(process.env.PORT) || 5000;
 const mongoUri = process.env.MONGODB_URI;
 const staticSiteDir = path.join(__dirname, '..', 'BAUST', 'BAUST');
-const usersFilePath = path.join(staticSiteDir, 'data', 'users.json');
+const dataDir = process.env.VERCEL ? path.join('/tmp', 'baust-data') : path.join(staticSiteDir, 'data');
+const usersFilePath = path.join(dataDir, 'users.json');
 const server = http.createServer(app);
 
 function ensureUsersStore() {

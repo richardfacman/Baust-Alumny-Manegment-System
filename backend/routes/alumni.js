@@ -5,7 +5,9 @@ const mongoose = require('mongoose');
 const Alumni = require('../models/Alumni');
 
 const router = express.Router();
-const alumniFilePath = path.join(__dirname, '..', '..', 'BAUST', 'BAUST', 'data', 'alumni.json');
+const sourceDataDir = path.join(__dirname, '..', '..', 'BAUST', 'BAUST', 'data');
+const dataDir = process.env.VERCEL ? path.join('/tmp', 'baust-data') : sourceDataDir;
+const alumniFilePath = path.join(dataDir, 'alumni.json');
 
 function databaseConnected() {
   return mongoose.connection.readyState === 1;
@@ -17,7 +19,9 @@ function ensureAlumniStore() {
     fs.mkdirSync(alumniDir, { recursive: true });
   }
   if (!fs.existsSync(alumniFilePath)) {
-    fs.writeFileSync(alumniFilePath, '[]', 'utf8');
+    const sourceFilePath = path.join(sourceDataDir, 'alumni.json');
+    const initialData = fs.existsSync(sourceFilePath) ? fs.readFileSync(sourceFilePath, 'utf8') : '[]';
+    fs.writeFileSync(alumniFilePath, initialData, 'utf8');
   }
 }
 

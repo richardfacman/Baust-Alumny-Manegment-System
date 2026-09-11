@@ -3,7 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 const router = express.Router();
-const dataDir = path.join(__dirname, '..', '..', 'BAUST', 'BAUST', 'data');
+const sourceDataDir = path.join(__dirname, '..', '..', 'BAUST', 'BAUST', 'data');
+const dataDir = process.env.VERCEL ? path.join('/tmp', 'baust-data') : sourceDataDir;
 
 const stores = {
   alumni: path.join(dataDir, 'alumni.json'),
@@ -16,7 +17,13 @@ const stores = {
 
 function ensureStore(filePath, fallback) {
   if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-  if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, JSON.stringify(fallback, null, 2), 'utf8');
+  if (!fs.existsSync(filePath)) {
+    const sourceFilePath = path.join(sourceDataDir, path.basename(filePath));
+    const initialData = fs.existsSync(sourceFilePath)
+      ? fs.readFileSync(sourceFilePath, 'utf8')
+      : JSON.stringify(fallback, null, 2);
+    fs.writeFileSync(filePath, initialData, 'utf8');
+  }
 }
 
 function readJson(name, fallback = []) {
