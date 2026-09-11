@@ -2,7 +2,7 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/api/:path*",
+      "source": "/api/admin/:path*",
       "destination": "/api/index?path=/:path*"
     },
     {
