@@ -20,6 +20,7 @@ const mongoUri = process.env.MONGODB_URI;
 const staticSiteDir = path.join(__dirname, '..', 'BAUST', 'BAUST');
 const dataDir = process.env.VERCEL ? path.join('/tmp', 'baust-data') : path.join(staticSiteDir, 'data');
 const usersFilePath = path.join(dataDir, 'users.json');
+const sourceUsersFilePath = path.join(staticSiteDir, 'data', 'users.json');
 const server = http.createServer(app);
 let databaseReady;
 
@@ -29,7 +30,10 @@ function ensureUsersStore() {
     fs.mkdirSync(usersDir, { recursive: true });
   }
   if (!fs.existsSync(usersFilePath)) {
-    fs.writeFileSync(usersFilePath, '[]', 'utf8');
+    const initialUsers = fs.existsSync(sourceUsersFilePath)
+      ? fs.readFileSync(sourceUsersFilePath, 'utf8')
+      : '[]';
+    fs.writeFileSync(usersFilePath, initialUsers, 'utf8');
   }
 }
 
